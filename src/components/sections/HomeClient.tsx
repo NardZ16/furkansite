@@ -9,8 +9,7 @@ import Image from "next/image";
 type Project = { id: string; title: string; description: string; coverImage: string | null; category: { name: string }; };
 type Experience = { id: string; title: string; company: string; date: string; description: string; };
 type Skill = { id: string; iconName: string; title: string; description: string; };
-type SiteSettings = { heroTitle: string; heroSubtitle: string; aboutText1: string; aboutText2: string; licenseTitle: string; licenseDesc: string; } | null;
-
+type SiteSettings = { heroTitle: string; heroSubtitle: string; aboutText1: string; aboutText2: string; licenseTitle: string; licenseDesc: string; heroImage: string; } | null;
 type HomeClientProps = {
   projects: Project[];
   experiences: Experience[];
