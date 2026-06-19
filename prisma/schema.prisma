@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  projects  Project[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  clientName  String?
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  
+  coverImage  String?  // URL to the cover image
+  mediaUrl    String?  // URL to the video, image, or embed link
+  mediaType   String   @default("image") // "image", "video", "embed"
+  
+  featured    Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ContactMessage {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  projectType String?
+  message     String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model SiteSettings {
+  id          String   @id @default("global") // Sadece tek bir satır olacağı için id sabit olabilir
+  heroTitle   String   @default("BEN KİMİM?")
+  heroSubtitle String  @default("Videographer, Video Yapımcısı & Grafik Tasarım Uzmanı")
+  aboutText1  String   @default("Çekimden kurguya kadar tüm süreci tek başına yürütebilen...")
+  aboutText2  String   @default("Konsept geliştirme, çekim, yönetmenlik ve post-prodüksiyon...")
+  licenseTitle String  @default("Ticari İHA-1 Pilot Lisansı")
+  licenseDesc String   @default("Profesyonel Drone ve Hava Çekimi Yetkisi")
+  heroImage   String   @default("https://images.unsplash.com/photo-1600486913747-55e5470d6f40?q=80&w=2070&auto=format&fit=crop")
+  updatedAt   DateTime @updatedAt
+}
+
+model Experience {
+  id          String   @id @default(cuid())
+  title       String
+  company     String
+  date        String   // "2024 - 2026" gibi
+  description String
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Skill {
+  id          String   @id @default(cuid())
+  iconName    String   // "Video", "Camera", "Edit" vb. lucide-react ikon isimleri
+  title       String
+  description String
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
