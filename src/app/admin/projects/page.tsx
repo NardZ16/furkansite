@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
-import { PlusCircle, Image as ImageIcon } from "lucide-react";
+import { PlusCircle, Image as ImageIcon, Edit2 } from "lucide-react";
 import DeleteProjectButton from "@/components/admin/DeleteProjectButton";
 
 export default async function AdminProjectsPage() {
@@ -62,7 +62,10 @@ export default async function AdminProjectsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-muted capitalize">{project.mediaType}</td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-right flex justify-end gap-2">
+                      <Link href={`/admin/projects/${project.id}`} className="text-muted hover:text-white transition-colors p-2 bg-white/5 rounded-lg">
+                        <Edit2 size={18} />
+                      </Link>
                       <DeleteProjectButton id={project.id} />
                     </td>
                   </tr>

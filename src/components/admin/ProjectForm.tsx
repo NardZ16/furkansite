@@ -2,22 +2,43 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createProject } from "@/actions/projects";
+import { createProject, updateProject } from "@/actions/projects";
 
 type Category = { id: string; name: string };
+type ProjectData = {
+  id: string;
+  title: string;
+  description: string;
+  categoryId: string;
+  mediaType: string;
+  clientName: string | null;
+  coverImage: string | null;
+  mediaUrl: string | null;
+};
 
-export default function ProjectForm({ categories }: { categories: Category[] }) {
+export default function ProjectForm({ 
+  categories, 
+  initialData 
+}: { 
+  categories: Category[]; 
+  initialData?: ProjectData 
+}) {
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(initialData?.categoryId || "");
 
   async function handleSubmit(formData: FormData) {
     setIsPending(true);
     setError(null);
     
-    const result = await createProject(formData);
+    let result;
+    if (initialData?.id) {
+      result = await updateProject(initialData.id, formData);
+    } else {
+      result = await createProject(formData);
+    }
     
     if (result.success) {
       router.push("/admin/projects");
@@ -38,7 +59,7 @@ export default function ProjectForm({ categories }: { categories: Category[] }) 
 
       <div className="space-y-2">
         <label htmlFor="title" className="text-sm font-medium text-muted">Proje Başlığı *</label>
-        <input required type="text" id="title" name="title" className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" />
+        <input required defaultValue={initialData?.title} type="text" id="title" name="title" className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" />
       </div>
 
       <div className="space-y-2">
@@ -68,13 +89,13 @@ export default function ProjectForm({ categories }: { categories: Category[] }) 
 
       <div className="space-y-2">
         <label htmlFor="description" className="text-sm font-medium text-muted">Açıklama *</label>
-        <textarea required id="description" name="description" rows={4} className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors resize-none"></textarea>
+        <textarea required defaultValue={initialData?.description} id="description" name="description" rows={4} className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors resize-none"></textarea>
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div className="space-y-2">
           <label htmlFor="mediaType" className="text-sm font-medium text-muted">Medya Tipi</label>
-          <select id="mediaType" name="mediaType" className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors appearance-none">
+          <select defaultValue={initialData?.mediaType || "video"} id="mediaType" name="mediaType" className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors appearance-none">
             <option value="video">Video</option>
             <option value="image">Görsel</option>
             <option value="embed">Embed (YouTube/Vimeo vb.)</option>
@@ -82,18 +103,18 @@ export default function ProjectForm({ categories }: { categories: Category[] }) 
         </div>
         <div className="space-y-2">
           <label htmlFor="clientName" className="text-sm font-medium text-muted">Müşteri / Kurum</label>
-          <input type="text" id="clientName" name="clientName" className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" />
+          <input type="text" defaultValue={initialData?.clientName || ""} id="clientName" name="clientName" className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" />
         </div>
       </div>
 
       <div className="space-y-2">
         <label htmlFor="coverImage" className="text-sm font-medium text-muted">Kapak Görseli URL (Opsiyonel)</label>
-        <input type="url" id="coverImage" name="coverImage" placeholder="https://..." className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" />
+        <input type="url" defaultValue={initialData?.coverImage || ""} id="coverImage" name="coverImage" placeholder="https://..." className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" />
       </div>
 
       <div className="space-y-2">
         <label htmlFor="mediaUrl" className="text-sm font-medium text-muted">Medya Linki URL (Opsiyonel)</label>
-        <input type="url" id="mediaUrl" name="mediaUrl" placeholder="https://..." className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" />
+        <input type="url" defaultValue={initialData?.mediaUrl || ""} id="mediaUrl" name="mediaUrl" placeholder="https://..." className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" />
       </div>
 
       <div className="pt-4 flex justify-end">
@@ -109,7 +130,7 @@ export default function ProjectForm({ categories }: { categories: Category[] }) 
           disabled={isPending}
           className="px-8 py-3 bg-accent text-black font-bold rounded-xl hover:bg-amber-400 transition-colors disabled:opacity-50"
         >
-          {isPending ? "Kaydediliyor..." : "Projeyi Kaydet"}
+          {isPending ? "Kaydediliyor..." : (initialData?.id ? "Değişiklikleri Kaydet" : "Projeyi Kaydet")}
         </button>
       </div>
     </form>
