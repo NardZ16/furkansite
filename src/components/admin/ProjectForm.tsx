@@ -11,6 +11,8 @@ export default function ProjectForm({ categories }: { categories: Category[] }) 
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [selectedCategory, setSelectedCategory] = useState("");
+
   async function handleSubmit(formData: FormData) {
     setIsPending(true);
     setError(null);
@@ -41,13 +43,28 @@ export default function ProjectForm({ categories }: { categories: Category[] }) 
 
       <div className="space-y-2">
         <label htmlFor="categoryId" className="text-sm font-medium text-muted">Kategori *</label>
-        <select required id="categoryId" name="categoryId" className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors appearance-none">
+        <select 
+          required 
+          id="categoryId" 
+          name="categoryId" 
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors appearance-none"
+        >
           <option value="">Seçiniz...</option>
           {categories.map(c => (
              <option key={c.id} value={c.id}>{c.name}</option>
           ))}
+          <option value="new">+ Yeni Kategori Ekle</option>
         </select>
       </div>
+
+      {selectedCategory === "new" && (
+        <div className="space-y-2">
+          <label htmlFor="newCategoryName" className="text-sm font-medium text-accent">Yeni Kategori Adı *</label>
+          <input required type="text" id="newCategoryName" name="newCategoryName" placeholder="Örn: Kısa Film, Reklam..." className="w-full bg-accent/5 border border-accent/30 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" />
+        </div>
+      )}
 
       <div className="space-y-2">
         <label htmlFor="description" className="text-sm font-medium text-muted">Açıklama *</label>

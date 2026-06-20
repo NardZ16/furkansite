@@ -7,7 +7,8 @@ export async function createProject(formData: FormData) {
   try {
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
-    const categoryId = formData.get("categoryId") as string;
+    let categoryId = formData.get("categoryId") as string;
+    const newCategoryName = formData.get("newCategoryName") as string;
     const mediaType = formData.get("mediaType") as string || "video";
     
     // Optional fields
@@ -16,8 +17,18 @@ export async function createProject(formData: FormData) {
     const mediaUrl = formData.get("mediaUrl") as string | null;
     const sortOrder = parseInt((formData.get("sortOrder") as string) || "0");
 
-    if (!title || !description || !categoryId) {
-      return { success: false, error: "Başlık, Açıklama ve Kategori zorunludur." };
+    if (!title || !description) {
+      return { success: false, error: "Başlık ve Açıklama zorunludur." };
+    }
+
+    // Handle new category creation
+    if (categoryId === "new" && newCategoryName) {
+      const newCat = await prisma.category.create({
+        data: { name: newCategoryName.trim() }
+      });
+      categoryId = newCat.id;
+    } else if (!categoryId || categoryId === "new") {
+      return { success: false, error: "Lütfen bir kategori seçin veya yeni bir kategori adı girin." };
     }
 
     await prisma.project.create({
