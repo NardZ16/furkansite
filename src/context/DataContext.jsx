@@ -44,6 +44,40 @@ const defaultData = {
     instagram: "https://instagram.com",
     youtube: "https://youtube.com"
   },
+  services: {
+    headline: "Uzmanlık Alanlarım",
+    description: "Markanızın ihtiyaç duyduğu tüm görsel süreçleri, ilk fikirden son piksele kadar profesyonellikle yönetiyorum.",
+    list: [
+      {
+        id: "1",
+        title: "Fotoğraf Çekimi",
+        description: "Ürün, mekân ve etkinlik fotoğrafçılığı. Markanızın ruhunu yansıtan etkileyici kareler.",
+        image: "https://storage.googleapis.com/webild/default/templates/creative-portfolio/photography.webp",
+        colSpan: 5
+      },
+      {
+        id: "2",
+        title: "Video Çekimi & Yönetmenlik",
+        description: "Stüdyo, dış mekân ve hava (drone) çekimleri; ışık, kompozisyon ve set yönetimi.",
+        image: "https://storage.googleapis.com/webild/default/templates/creative-portfolio/product-design.webp",
+        colSpan: 7
+      },
+      {
+        id: "3",
+        title: "Video Kurgu & Post-Prodüksiyon",
+        description: "Adobe Premiere Pro & After Effects ile montaj, renk düzenleme, ses ve hareketli grafik tasarımı.",
+        image: "https://storage.googleapis.com/webild/default/templates/creative-portfolio/website.webp",
+        colSpan: 7
+      },
+      {
+        id: "4",
+        title: "Adobe Photoshop",
+        description: "Fotoğraf manipülasyonu, görsel rötuş ve mockup tasarımıyla görselleri kusursuzlaştırıyorum.",
+        image: "https://storage.googleapis.com/webild/default/templates/creative-portfolio/videos.webp",
+        colSpan: 5
+      }
+    ]
+  },
   contact: {
     headline: "Birlikte Üretelim",
     description: "Aklınızda bir proje mi var? Bana mesaj gönderin, en kısa sürede dönüş yapayım.",
@@ -84,9 +118,13 @@ export const DataProvider = ({ children }) => {
 
   const updateData = async (newData) => {
     try {
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/content', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-admin-password': token || ''
+        },
         body: JSON.stringify(newData)
       });
       if (response.ok) {

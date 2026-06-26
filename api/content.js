@@ -32,6 +32,11 @@ export default async function handler(req, res) {
   } 
   
   else if (req.method === 'PUT') {
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin';
+    if (req.headers['x-admin-password'] !== adminPassword) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
     try {
       const newData = req.body;
       const existing = await prisma.portfolioContent.findFirst();
