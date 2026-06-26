@@ -54,7 +54,18 @@ export function Home() {
   }
 
   return (
-    <div className="relative bg-background min-h-screen text-foreground overflow-hidden">
+    <div className="relative min-h-screen font-sans overflow-hidden">
+      <div 
+        className="fixed inset-0 -z-10 pointer-events-none select-none" 
+        aria-hidden="true"
+        style={{
+          background: `
+            radial-gradient(100% 100% at top right, var(--color-background-accent) 0%, transparent 70%),
+            radial-gradient(100% 100% at bottom left, var(--color-background-accent) 0%, transparent 70%),
+            var(--color-background)
+          `
+        }}
+      ></div>
       <Navbar />
       <main>
         <Hero />

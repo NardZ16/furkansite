@@ -58,7 +58,7 @@ export function Work() {
           </div>
           
           <div className="flex flex-col gap-3 xl:gap-4 2xl:gap-5">
-            <motion.div style={{ y: y2, x: x2, rotate: rotate2, scale: scale2, zIndex: 20 }} className="aspect-4/3 rounded-3xl shadow-lg relative card p-2 xl:p-3 2xl:p-4 group mt-10 md:mt-20 will-change-transform origin-center">
+            <motion.div style={{ y: y2, x: x2, rotate: rotate2, scale: scale2, zIndex: 20 }} className="aspect-4/3 rounded-3xl shadow-lg relative card p-2 xl:p-3 2xl:p-4 group will-change-transform origin-center">
               <div className="w-full h-full aspect-4/3 rounded-[1rem] overflow-hidden relative">
                 <img alt={data.work?.projects?.[1]?.title} className="min-h-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src={data.work?.projects?.[1]?.image} />
                 <span className="absolute bottom-2 left-2 xl:bottom-3 xl:left-3 2xl:bottom-4 2xl:left-4 px-3 py-1.5 text-xs font-medium text-primary-cta-text rounded-full backdrop-blur-xl bg-primary-cta-text/15 border border-primary-cta-text/20">{data.work?.projects?.[1]?.tag}</span>
@@ -71,7 +71,7 @@ export function Work() {
           </div>
           
           <div className="flex flex-col gap-3 xl:gap-4 2xl:gap-5">
-            <motion.div style={{ y: y3, x: x3, rotate: rotate3, scale: scale3, zIndex: 10 }} className="aspect-4/3 rounded-3xl shadow-lg relative card p-2 xl:p-3 2xl:p-4 group mt-20 md:mt-40 will-change-transform origin-center">
+            <motion.div style={{ y: y3, x: x3, rotate: rotate3, scale: scale3, zIndex: 10 }} className="aspect-4/3 rounded-3xl shadow-lg relative card p-2 xl:p-3 2xl:p-4 group will-change-transform origin-center">
               <div className="w-full h-full aspect-4/3 rounded-[1rem] overflow-hidden relative">
                 <img alt={data.work?.projects?.[2]?.title} className="min-h-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src={data.work?.projects?.[2]?.image} />
                 <span className="absolute bottom-2 left-2 xl:bottom-3 xl:left-3 2xl:bottom-4 2xl:left-4 px-3 py-1.5 text-xs font-medium text-primary-cta-text rounded-full backdrop-blur-xl bg-primary-cta-text/15 border border-primary-cta-text/20">{data.work?.projects?.[2]?.tag}</span>
