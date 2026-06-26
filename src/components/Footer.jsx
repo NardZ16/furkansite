@@ -5,9 +5,9 @@ import { useData } from '../context/DataContext';
 export function Footer() {
   const { data } = useData();
   return (
-    <footer data-section="footer" aria-label="Site footer" className="relative w-full py-20">
+    <footer data-section="footer" aria-label="Site footer" className="relative w-full pb-10">
       <div className="flex flex-col w-content-width mx-auto px-6 md:px-10 pb-5 rounded-lg card">
-        <div className="w-full min-w-0 flex-1 py-10 md:py-16 lg:py-20 flex justify-center overflow-hidden">
+        <div className="w-full min-w-0 flex-1 py-6 md:py-10 lg:py-12 flex justify-center overflow-hidden">
           <h2 className="whitespace-nowrap transition-opacity duration-150 opacity-100 font-semibold text-[15vw] md:text-[205px] leading-[0.8]">
             {data.footer?.name || "Kocabaş"}
           </h2>
