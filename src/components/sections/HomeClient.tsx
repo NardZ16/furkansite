@@ -122,12 +122,22 @@ export default function HomeClient({ projects, experiences, skills, settings }: 
                 FURKAN EFE
               </motion.h1>
               
-              <motion.div variants={itemVariants} className="mb-6 relative">
+              <div className="mb-6 relative">
                  {/* The Handwriting Font applied to the last name */}
-                 <span className="font-handwriting text-[clamp(4rem,9vw,7rem)] leading-none text-accent drop-shadow-sm rotate-[-2deg] inline-block">
-                   {nameText}
-                 </span>
-              </motion.div>
+                 <motion.div 
+                   className="inline-block relative"
+                   initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
+                   animate={{ clipPath: "inset(0 0% 0 0)", opacity: 1 }}
+                   transition={{ 
+                     clipPath: { duration: 1.2, ease: "easeInOut", delay: 1.5 },
+                     opacity: { duration: 0.1, delay: 1.5 }
+                   }}
+                 >
+                   <span className="font-handwriting text-[clamp(4rem,9vw,7rem)] leading-none text-accent drop-shadow-sm rotate-[-2deg] inline-block px-2">
+                     {nameText}
+                   </span>
+                 </motion.div>
+              </div>
               
               <motion.p variants={itemVariants} className="text-[15px] md:text-[17px] text-muted font-medium mb-10 max-w-md leading-relaxed">
                 {s.heroSubtitle}. {s.aboutText1.substring(0, 80)}...
