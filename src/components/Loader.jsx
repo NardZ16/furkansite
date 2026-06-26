@@ -25,7 +25,7 @@ export function Loader({ onLoadingComplete }) {
       initial={{ y: 0 }}
       exit={{ y: "-100%" }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-      className="fixed inset-0 z-100 text-primary-cta-text"
+      className="fixed inset-0 z-[100] text-primary-cta-text"
     >
       <div className="absolute inset-0 w-full h-full bg-[#111]">
         <motion.div 

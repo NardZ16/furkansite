@@ -11,6 +11,7 @@ import { Contact } from '../components/Contact';
 import { Footer } from '../components/Footer';
 import { useData } from '../context/DataContext';
 import Lenis from 'lenis';
+import { AnimatePresence } from 'framer-motion';
 
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -49,13 +50,15 @@ export function Home() {
     }
   }, [dataLoading]);
 
-  if (isLoading || dataLoading) {
-    return <Loader />;
-  }
-
   return (
-    <div className="relative min-h-screen font-sans overflow-hidden">
-      <div 
+    <>
+      <AnimatePresence>
+        {(isLoading || dataLoading) && <Loader key="loader" />}
+      </AnimatePresence>
+
+      {!dataLoading && (
+        <div className="relative min-h-screen font-sans overflow-hidden">
+          <div 
         className="fixed inset-0 -z-10 pointer-events-none select-none" 
         aria-hidden="true"
         style={{
@@ -74,9 +77,11 @@ export function Home() {
         <About />
         <Services />
         <FAQ />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+          <Contact />
+        </main>
+        <Footer />
+      </div>
+      )}
+    </>
   );
 }
