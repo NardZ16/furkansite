@@ -15,11 +15,7 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="w-full md:w-[46%] flex flex-col items-center md:items-start gap-3"
           >
-            <div className="card backdrop-blur flex items-center gap-2 px-3 py-1 rounded">
-              <span className="size-2 rounded-full bg-green-500 animate-pulse"></span>
-              <p className="text-sm leading-snug font-medium text-foreground">{data.hero?.badge}</p>
-            </div>
-            <h1 className="text-5xl md:text-6xl 2xl:text-7xl font-medium leading-[1.05] tracking-tight text-center md:text-left">
+            <h1 className="text-5xl md:text-6xl 2xl:text-7xl font-medium leading-[1.05] tracking-tight text-center md:text-left mt-4">
               <span className="inline pb-[0.1em] -mb-[0.1em] bg-[linear-gradient(to_right,var(--foreground),var(--primary-cta))] bg-clip-text text-transparent">
                 {data.hero?.headlinePrefix} <span className="font-bold">{data.hero?.headlineHighlight}</span>
               </span>

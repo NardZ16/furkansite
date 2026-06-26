@@ -38,6 +38,14 @@ export function Contact() {
                   <TextReveal as="p" className="transition-all duration-700 text-base md:text-lg leading-snug text-balance">
                     {data.contact?.description}
                   </TextReveal>
+                  <div className="flex flex-col md:flex-row gap-3 md:gap-6 mt-2 text-sm md:text-base opacity-80">
+                    <a href={`tel:${data.contact?.phone || '+905353050240'}`} className="hover:text-primary-cta transition-colors">
+                      {data.contact?.phone || '+90 535 305 02 40'}
+                    </a>
+                    <a href={`mailto:${data.contact?.email || 'iletisim@furkanefekocabas.com'}`} className="hover:text-primary-cta transition-colors">
+                      {data.contact?.email || 'iletisim@furkanefekocabas.com'}
+                    </a>
+                  </div>
                 </div>
                 <div className="flex flex-col gap-3">
                   <input placeholder="Adınız Soyadınız" required aria-label="Adınız Soyadınız" className="w-full px-5 py-3 text-base bg-transparent placeholder:opacity-75 focus:outline-none card rounded focus:border-accent/50" type="text" />
@@ -53,12 +61,6 @@ export function Contact() {
               <motion.div style={{ scale }} className="w-full h-full origin-center transition-transform duration-700 ease-out group-hover:scale-105">
                 <img alt="Contact" className="min-h-0 rounded md:absolute md:inset-0 size-full object-cover" src="https://storage.googleapis.com/webild/default/templates/creative-portfolio/contact.webp" />
               </motion.div>
-              <div className="absolute inset-0 flex flex-wrap items-end justify-center gap-3 p-6 xl:p-7 2xl:p-8">
-                <a href={`tel:${data.contact?.phone || '+905353050240'}`} className="flex items-center justify-center gap-2 h-9 px-3 text-sm rounded-full cursor-pointer backdrop-blur-xl bg-primary-cta-text/15 border border-primary-cta-text/20 text-primary-cta-text font-semibold hover:bg-primary-cta-text/25 transition-all duration-300 ease-out">
-                  <Video className="w-4 h-4" />
-                  <span>{data.contact?.buttonText}</span>
-                </a>
-              </div>
             </div>
           </motion.div>
         </div>
