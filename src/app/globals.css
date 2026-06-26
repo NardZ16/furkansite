@@ -9,8 +9,7 @@
   --color-muted: #6B7280;
   
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-oswald), ui-sans-serif, system-ui, sans-serif;
-  --font-handwriting: var(--font-caveat), cursive;
+  --font-heading: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
@@ -19,7 +18,8 @@
 }
 
 body {
-  background: var(--background);
+  background: radial-gradient(circle at top, #FFFFFF 0%, #F3F4F6 50%, #E5E7EB 100%);
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -28,10 +28,6 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-}
-
-.font-handwriting {
-  font-family: var(--font-handwriting);
 }
 
 /* ─── Custom Scrollbar ────────────────────────── */

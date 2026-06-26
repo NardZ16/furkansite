@@ -6,6 +6,7 @@ import { ArrowRight, Plane, CheckCircle, ArrowDown, Play } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
+import TiltCard from "@/components/ui/TiltCard";
 
 type Project = { id: string; title: string; description: string; coverImage: string | null; category: { name: string }; };
 type Experience = { id: string; title: string; company: string; date: string; description: string; };
@@ -51,147 +52,125 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
   return <div ref={ref}>{count}{suffix}</div>;
 }
 
-import TiltCard from "@/components/ui/TiltCard";
-
 export default function HomeClient({ projects, experiences, skills, settings }: HomeClientProps) {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-  
-  // Parallax effects
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   
   const s = {
-    heroTitle: settings?.heroTitle || "BEN KİMİM?",
-    heroSubtitle: settings?.heroSubtitle || "Videographer • Grafik Tasarım • Drone Pilotu",
+    heroTitle: "Dikkat çeken tasarımlar.",
+    heroSubtitle: "Sadece estetik değil, performans odaklı tasarımlar. Markanızın dikkat çekmesi ve gelir elde etmesi için gereken her görsel dokunuşu özenle işliyorum.",
     aboutText1: settings?.aboutText1 || "Çekimden kurguya kadar tüm süreci tek başına yürütebilen, yaratıcı ve teknik yetkinliklere sahip bir görüntü yönetmeniyim.",
     aboutText2: settings?.aboutText2 || "Konsept geliştirme, çekim, yönetmenlik ve post-prodüksiyon aşamalarını uçtan uca bizzat üstleniyorum.",
     licenseTitle: settings?.licenseTitle || "Ticari İHA-1 Pilot Lisansı",
     licenseDesc: settings?.licenseDesc || "Profesyonel Drone ve Hava Çekimi Yetkisi"
   };
 
-  // Stagger animation configs
   const containerVariants = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.15, delayChildren: 0.8 } }
+    visible: { transition: { staggerChildren: 0.15, delayChildren: 0.3 } }
   };
   const itemVariants = {
-    hidden: { opacity: 0, y: 40 },
+    hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" as const } }
   };
 
-  // Handwriting text animation
-  const nameText = "Kocabaş";
-  const nameVariants = {
-    hidden: { opacity: 0, pathLength: 0 },
-    visible: { opacity: 1, pathLength: 1, transition: { duration: 2, ease: "easeInOut" } }
-  };
+  // Card fan animation variants
+  const cards = [
+    { id: 3, rotate: 12, x: 40, y: -20, delay: 0.8, zIndex: 10, img: projects[2]?.coverImage || "https://images.unsplash.com/photo-1600486913747-55e5470d6f40?q=80&w=2070" },
+    { id: 2, rotate: 4, x: 20, y: -10, delay: 1.0, zIndex: 20, img: projects[1]?.coverImage || "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2070" },
+    { id: 1, rotate: -4, x: 0, y: 0, delay: 1.2, zIndex: 30, img: projects[0]?.coverImage || settings?.heroImage || "https://images.unsplash.com/photo-1621619856624-42fd193a0661?q=80&w=2070" },
+  ];
 
   return (
-    <div className="w-full bg-background overflow-hidden relative">
-      {/* Light Grid Background */}
-      <div className="absolute inset-0 bg-grid opacity-50 z-0 pointer-events-none" />
+    <div className="w-full overflow-hidden relative">
 
       {/* ══════════════════════════════════════════════
-          HERO — Bright, Airy, Split Layout
+          HERO — Webild Replica
          ══════════════════════════════════════════════ */}
-      <section ref={heroRef} className="relative min-h-screen w-full flex items-center pt-20 pb-12 z-10">
-        
-        {/* Floating Decorative Elements */}
-        <motion.div className="absolute top-1/4 left-10 w-24 h-24 bg-accent/5 rounded-full blur-2xl animate-float pointer-events-none" />
-        <motion.div className="absolute bottom-1/4 right-20 w-48 h-48 bg-accent-light/10 rounded-full blur-3xl animate-float-reverse pointer-events-none" />
-
-        <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+      <section className="relative min-h-screen w-full flex items-center pt-24 pb-12 z-10">
+        <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 items-center">
           
           {/* Left: Typography & Intro */}
-          <motion.div style={{ opacity, y: y1 }} className="pt-10 lg:pt-0">
+          <motion.div className="pt-10 lg:pt-0 max-w-lg z-20">
             <motion.div variants={containerVariants} initial="hidden" animate="visible">
-              <motion.div variants={itemVariants} className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 mb-8">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-accent"></span>
+              
+              {/* Availability Badge */}
+              <motion.div variants={itemVariants} className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-black/5 border border-black/10 mb-8 backdrop-blur-sm shadow-sm">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                 </span>
-                <span className="text-accent text-[11px] font-bold tracking-[0.2em] uppercase">Freelance Müsait</span>
+                <span className="text-[12px] font-medium tracking-wide text-foreground/80">Bu ay için 1 boşluk</span>
               </motion.div>
               
-              <motion.h1 variants={itemVariants} className="font-heading text-[clamp(2.5rem,6vw,5rem)] font-bold leading-[1.1] tracking-tight text-foreground mb-2">
-                FURKAN EFE
+              {/* Heading */}
+              <motion.h1 variants={itemVariants} className="font-sans text-[clamp(3.5rem,7vw,5.5rem)] font-bold leading-[0.95] tracking-tight text-[#111827] mb-6">
+                {s.heroTitle.split(' ').map((word, i) => (
+                  <span key={i} className="block">{word}</span>
+                ))}
               </motion.h1>
               
-              <div className="mb-6 relative">
-                 {/* The Handwriting Font applied to the last name */}
-                 <motion.div 
-                   className="inline-block relative"
-                   initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
-                   animate={{ clipPath: "inset(0 0% 0 0)", opacity: 1 }}
-                   transition={{ 
-                     clipPath: { duration: 1.2, ease: "easeInOut", delay: 1.5 },
-                     opacity: { duration: 0.1, delay: 1.5 }
-                   }}
-                 >
-                   <span className="font-handwriting text-[clamp(4rem,9vw,7rem)] leading-none text-accent drop-shadow-sm rotate-[-2deg] inline-block px-2">
-                     {nameText}
-                   </span>
-                 </motion.div>
-              </div>
-              
-              <motion.p variants={itemVariants} className="text-[15px] md:text-[17px] text-muted font-medium mb-10 max-w-md leading-relaxed">
-                {s.heroSubtitle}. {s.aboutText1.substring(0, 80)}...
+              {/* Subtitle */}
+              <motion.p variants={itemVariants} className="text-[16px] md:text-[18px] text-[#4B5563] font-medium mb-10 leading-relaxed max-w-md">
+                {s.heroSubtitle}
               </motion.p>
 
+              {/* CTA Button */}
               <motion.div variants={itemVariants} className="flex flex-wrap gap-4 items-center">
-                <Link
-                  href="/portfolio"
-                  className="px-8 py-4 bg-accent text-white text-[13px] font-bold tracking-[0.1em] uppercase rounded-xl shadow-lg shadow-accent/30 hover:shadow-accent/50 hover:-translate-y-1 transition-all duration-300"
-                >
-                  Portfolyomu Gör
+                <Link href="/contact" className="group flex items-center gap-4 bg-[#2A2A2A] text-white rounded-full pr-7 pl-1.5 py-1.5 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/10 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#3A3A3A]">
+                    <Image 
+                      src="https://i.hizliresim.com/j122le7.jpg" 
+                      alt="Avatar" 
+                      width={40} 
+                      height={40} 
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                  <span className="font-semibold text-[14px]">Benimle iletişime geç</span>
                 </Link>
-                <div className="flex items-center gap-4 ml-4">
-                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-surface border border-muted/20 flex items-center justify-center text-foreground hover:text-accent hover:border-accent transition-colors shadow-sm">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                  </a>
-                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-surface border border-muted/20 flex items-center justify-center text-foreground hover:text-accent hover:border-accent transition-colors shadow-sm">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                  </a>
-                </div>
               </motion.div>
+
             </motion.div>
           </motion.div>
 
-          {/* Right: Floating Hero Image */}
-          <motion.div style={{ y: y2 }} className="relative h-[500px] lg:h-[650px] w-full hidden md:block">
-            <TiltCard>
-              <div className="relative w-full h-full rounded-[2rem] overflow-hidden shadow-2xl border-[8px] border-surface">
-                <Image
-                  src={settings?.heroImage || "https://images.unsplash.com/photo-1600486913747-55e5470d6f40?q=80&w=2070&auto=format&fit=crop"}
-                  alt="Furkan Efe Kocabaş"
-                  fill
-                  className="object-cover object-center"
-                  priority
-                />
-                
-                {/* Floating Badge on Image */}
-                <motion.div 
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", delay: 1.5, bounce: 0.5 }}
-                  className="absolute bottom-8 -left-8 md:-left-12 bg-surface p-4 rounded-2xl shadow-xl border border-muted/10 flex items-center gap-4 animate-float"
+          {/* Right: Fanned Out Cards */}
+          <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] w-full mt-12 lg:mt-0 perspective-1000">
+            <div className="absolute inset-0 flex items-center justify-center lg:justify-end lg:pr-10">
+              
+              {cards.map((card, index) => (
+                <motion.div
+                  key={card.id}
+                  initial={{ opacity: 0, x: 100, rotate: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, x: card.x, y: card.y, rotate: card.rotate, scale: 1 }}
+                  transition={{
+                    duration: 1.2,
+                    delay: card.delay,
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 20
+                  }}
+                  whileHover={{ 
+                    scale: 1.05, 
+                    rotate: card.rotate * 1.5,
+                    y: card.y - 10,
+                    transition: { duration: 0.4 } 
+                  }}
+                  style={{ zIndex: card.zIndex }}
+                  className="absolute w-[280px] sm:w-[350px] lg:w-[420px] aspect-[4/3] rounded-3xl bg-white border-[8px] sm:border-[12px] border-white shadow-2xl overflow-hidden cursor-pointer"
                 >
-                   <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center text-accent">
-                     <Plane size={24} />
-                   </div>
-                   <div>
-                     <p className="text-[11px] text-muted font-bold tracking-wider uppercase">Lisanslı Pilot</p>
-                     <p className="font-heading text-lg font-bold">İHA-1</p>
-                   </div>
+                  <Image
+                    src={card.img}
+                    alt={`Portfolio ${card.id}`}
+                    fill
+                    className="object-cover"
+                    priority={index === 2}
+                  />
+                  {/* Subtle overlay */}
+                  <div className="absolute inset-0 bg-black/5 rounded-[1.2rem]"></div>
                 </motion.div>
-              </div>
-            </TiltCard>
-          </motion.div>
+              ))}
+
+            </div>
+          </div>
 
         </div>
       </section>
@@ -199,7 +178,7 @@ export default function HomeClient({ projects, experiences, skills, settings }: 
       {/* ══════════════════════════════════════════════
           ABOUT — Stats & Bio (Light Version)
          ══════════════════════════════════════════════ */}
-      <section className="relative py-32 z-10 bg-surface">
+      <section className="relative py-32 z-10 bg-transparent">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             
@@ -210,13 +189,13 @@ export default function HomeClient({ projects, experiences, skills, settings }: 
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8 }}
             >
-              <span className="text-accent text-[11px] font-bold tracking-[0.2em] uppercase block mb-4 relative pl-8 before:content-[''] before:absolute before:left-0 before:top-1/2 before:w-5 before:h-px before:bg-accent">
+              <span className="text-[#111827] text-[11px] font-bold tracking-[0.2em] uppercase block mb-4 relative pl-8 before:content-[''] before:absolute before:left-0 before:top-1/2 before:w-5 before:h-px before:bg-[#111827]">
                 Hakkımda
               </span>
-              <h2 className="font-heading text-4xl md:text-5xl font-bold leading-tight mb-8 text-foreground">
-                Görüntüleri <span className="text-accent font-handwriting text-5xl md:text-6xl px-2 font-normal">Hikayeye</span><br />Dönüştürüyorum
+              <h2 className="font-sans text-4xl md:text-5xl font-bold leading-tight mb-8 text-[#111827] tracking-tight">
+                Görüntüleri <span className="text-[#6B7280]">Hikayeye</span><br />Dönüştürüyorum.
               </h2>
-              <div className="space-y-5 text-muted text-[16px] leading-relaxed">
+              <div className="space-y-5 text-[#4B5563] text-[16px] leading-relaxed font-medium">
                 <p>{s.aboutText1}</p>
                 <p>{s.aboutText2}</p>
               </div>
@@ -242,12 +221,12 @@ export default function HomeClient({ projects, experiences, skills, settings }: 
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ type: "spring", duration: 0.6, delay: 0.1 * i }}
-                    className="p-8 rounded-3xl bg-background border border-muted/10 card-hover-light text-center shadow-sm"
+                    className="p-8 rounded-[2rem] bg-white border border-gray-100 card-hover-light text-center shadow-lg shadow-black/[0.03]"
                   >
-                    <div className="font-heading text-5xl md:text-6xl font-bold text-accent mb-2 drop-shadow-sm">
+                    <div className="font-sans text-5xl md:text-6xl font-bold text-[#111827] mb-2 tracking-tighter">
                       <AnimatedCounter target={stat.number} suffix={stat.suffix} />
                     </div>
-                    <p className="text-muted text-[12px] tracking-[0.1em] uppercase font-bold">{stat.label}</p>
+                    <p className="text-[#6B7280] text-[12px] tracking-[0.1em] uppercase font-bold">{stat.label}</p>
                   </motion.div>
                 ))}
               </div>
@@ -257,7 +236,7 @@ export default function HomeClient({ projects, experiences, skills, settings }: 
       </section>
 
       {/* ══════════════════════════════════════════════
-          FEATURED PROJECTS — Float & Tilt Cards
+          FEATURED PROJECTS — Clean Cards
          ══════════════════════════════════════════════ */}
       <section className="py-32 px-6 sm:px-8 lg:px-12 max-w-7xl mx-auto relative z-10">
         <motion.div
@@ -267,8 +246,8 @@ export default function HomeClient({ projects, experiences, skills, settings }: 
           transition={{ duration: 0.6 }}
           className="text-center mb-20"
         >
-          <span className="text-accent text-[11px] font-bold tracking-[0.2em] uppercase block mb-4">Seçme İşler</span>
-          <h2 className="font-heading text-4xl md:text-5xl font-bold text-foreground">ÖNE ÇIKAN ÇALIŞMALARIM</h2>
+          <span className="text-[#111827] text-[11px] font-bold tracking-[0.2em] uppercase block mb-4">Seçme İşler</span>
+          <h2 className="font-sans text-4xl md:text-5xl font-bold text-[#111827] tracking-tight">Öne Çıkan Çalışmalar.</h2>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -282,8 +261,8 @@ export default function HomeClient({ projects, experiences, skills, settings }: 
               className="h-full"
             >
               <TiltCard className="h-full">
-                <div className="group relative h-full flex flex-col bg-surface rounded-3xl overflow-hidden border border-muted/10 card-hover-light">
-                  <div className="aspect-[4/3] relative overflow-hidden m-2 rounded-2xl">
+                <div className="group relative h-full flex flex-col bg-white rounded-[2rem] overflow-hidden border border-gray-100 card-hover-light shadow-xl shadow-black/[0.04]">
+                  <div className="aspect-[4/3] relative overflow-hidden m-3 rounded-2xl">
                     {project.coverImage ? (
                       <Image
                         src={project.coverImage}
@@ -292,24 +271,24 @@ export default function HomeClient({ projects, experiences, skills, settings }: 
                         className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                       />
                     ) : (
-                      <div className="w-full h-full bg-muted/10" />
+                      <div className="w-full h-full bg-gray-100" />
                     )}
                     {/* Hover Overlay with Icon */}
-                    <div className="absolute inset-0 bg-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
-                       <div className="bg-surface text-accent p-4 rounded-full shadow-xl transform scale-0 group-hover:scale-100 transition-transform duration-500 delay-100">
-                         <Play size={20} className="ml-1" />
+                    <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
+                       <div className="bg-[#111827] text-white p-4 rounded-full shadow-2xl transform scale-0 group-hover:scale-100 transition-transform duration-500 delay-100">
+                         <Play size={20} className="ml-1" fill="currentColor" />
                        </div>
                     </div>
                   </div>
                   
-                  <div className="p-6 flex-1 flex flex-col">
-                    <span className="text-accent text-[10px] font-bold tracking-[0.15em] uppercase mb-2 block">
+                  <div className="p-7 flex-1 flex flex-col">
+                    <span className="text-[#6B7280] text-[10px] font-bold tracking-[0.15em] uppercase mb-3 block">
                       {project.category.name}
                     </span>
-                    <h3 className="font-heading text-xl font-bold text-foreground mb-3 line-clamp-1">
+                    <h3 className="font-sans text-xl font-bold text-[#111827] mb-3 line-clamp-1 tracking-tight">
                       {project.title}
                     </h3>
-                    <p className="text-[14px] text-muted line-clamp-2">
+                    <p className="text-[14px] text-[#4B5563] line-clamp-2 font-medium">
                       {project.description}
                     </p>
                   </div>
@@ -320,16 +299,16 @@ export default function HomeClient({ projects, experiences, skills, settings }: 
         </div>
         
         <div className="mt-16 text-center">
-          <Link href="/portfolio" className="inline-flex items-center px-8 py-4 bg-surface border border-muted/20 text-[12px] font-bold tracking-[0.1em] uppercase text-foreground rounded-xl hover:border-accent hover:text-accent shadow-sm hover:shadow-md transition-all duration-300">
+          <Link href="/portfolio" className="inline-flex items-center px-8 py-4 bg-white border border-gray-200 text-[13px] font-bold tracking-[0.05em] text-[#111827] rounded-full hover:bg-gray-50 shadow-sm hover:shadow-md transition-all duration-300">
             Tüm Portfolyoyu İncele <ArrowRight className="ml-2" size={16} />
           </Link>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════
-          SKILLS / EXPERTISE — Bright Icons
+          SKILLS / EXPERTISE — Clean Icons
          ══════════════════════════════════════════════ */}
-      <section className="py-32 relative z-10 bg-surface border-t border-muted/10">
+      <section className="py-32 relative z-10 bg-white/50 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -338,8 +317,8 @@ export default function HomeClient({ projects, experiences, skills, settings }: 
             transition={{ duration: 0.6 }}
             className="text-center mb-20"
           >
-            <span className="text-accent text-[11px] font-bold tracking-[0.2em] uppercase block mb-4">Ne Yapıyorum</span>
-            <h2 className="font-heading text-4xl md:text-5xl font-bold mb-5 text-foreground">UZMANLIK ALANLARIM</h2>
+            <span className="text-[#111827] text-[11px] font-bold tracking-[0.2em] uppercase block mb-4">Ne Yapıyorum</span>
+            <h2 className="font-sans text-4xl md:text-5xl font-bold mb-5 text-[#111827] tracking-tight">Uzmanlık Alanlarım.</h2>
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -354,12 +333,12 @@ export default function HomeClient({ projects, experiences, skills, settings }: 
                   transition={{ type: "spring", duration: 0.8, delay: index * 0.1 }}
                 >
                   <TiltCard>
-                    <div className="p-8 rounded-3xl bg-background border border-muted/10 card-hover-light h-full flex flex-col items-center text-center group">
-                      <div className="w-16 h-16 rounded-2xl bg-accent/10 text-accent flex items-center justify-center mb-6 transform group-hover:-translate-y-2 group-hover:bg-accent group-hover:text-white transition-all duration-300 shadow-sm">
+                    <div className="p-8 rounded-[2rem] bg-white border border-gray-100 card-hover-light h-full flex flex-col items-center text-center group shadow-xl shadow-black/[0.02]">
+                      <div className="w-16 h-16 rounded-2xl bg-gray-50 text-[#111827] flex items-center justify-center mb-6 transform group-hover:-translate-y-2 group-hover:bg-[#111827] group-hover:text-white transition-all duration-300 shadow-sm border border-gray-100">
                         <IconComponent size={28} strokeWidth={2} />
                       </div>
-                      <h3 className="font-heading text-xl font-bold mb-3 tracking-wide text-foreground">{skill.title}</h3>
-                      <p className="text-muted text-[14px] leading-relaxed">{skill.description}</p>
+                      <h3 className="font-sans text-lg font-bold mb-3 tracking-tight text-[#111827]">{skill.title}</h3>
+                      <p className="text-[#4B5563] text-[14px] leading-relaxed font-medium">{skill.description}</p>
                     </div>
                   </TiltCard>
                 </motion.div>
