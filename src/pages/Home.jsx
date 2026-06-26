@@ -1,0 +1,71 @@
+import React, { useEffect, useState } from 'react';
+import { Loader } from '../components/Loader';
+import { Navbar } from '../components/Navbar';
+import { Hero } from '../components/Hero';
+import { Work } from '../components/Work';
+import { Testimonials } from '../components/Testimonials';
+import { About } from '../components/About';
+import { Services } from '../components/Services';
+import { FAQ } from '../components/FAQ';
+import { Contact } from '../components/Contact';
+import { Footer } from '../components/Footer';
+import { useData } from '../context/DataContext';
+import Lenis from 'lenis';
+
+export function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+  const { loading: dataLoading } = useData();
+
+  useEffect(() => {
+    // Lenis smooth scroll başlat
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+      mouseMultiplier: 1,
+      smoothTouch: false,
+      touchMultiplier: 2,
+      infinite: false,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    // Loader simulation (or wait for data)
+    if (!dataLoading) {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 2000); // 2 saniyelik loader gösterimi
+      return () => {
+        clearTimeout(timer);
+        lenis.destroy();
+      };
+    }
+  }, [dataLoading]);
+
+  if (isLoading || dataLoading) {
+    return <Loader />;
+  }
+
+  return (
+    <div className="relative bg-background min-h-screen text-foreground overflow-hidden">
+      <Navbar />
+      <main>
+        <Hero />
+        <Work />
+        <Testimonials />
+        <About />
+        <Services />
+        <FAQ />
+        <Contact />
+      </main>
+      <Footer />
+    </div>
+  );
+}
