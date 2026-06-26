@@ -31,7 +31,7 @@ export function Navbar() {
           className={`overflow-hidden backdrop-blur-md transition-colors duration-300 ${
             isMenuOpen 
               ? "bg-[#f5f5f5] dark:bg-[#1a1a1a] rounded-[2rem] p-3 shadow-2xl border border-black/5 dark:border-white/5" 
-              : "card rounded"
+              : "card rounded bg-black/5 dark:bg-white/10"
           }`}
         >
           {/* Header (Always Visible) */}
