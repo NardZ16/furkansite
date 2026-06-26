@@ -27,7 +27,7 @@ export function Loader({ onLoadingComplete }) {
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
       className="fixed inset-0 z-100 text-primary-cta-text"
     >
-      <div className="absolute inset-0 w-full h-full bg-background-accent">
+      <div className="absolute inset-0 w-full h-full bg-[#111]">
         <motion.div 
           className="absolute bottom-0 left-0 right-0 h-2 bg-primary-cta-text" 
           style={{ transformOrigin: "0% 50%" }}
