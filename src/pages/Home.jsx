@@ -69,7 +69,7 @@ export function Home() {
           `
         }}
       ></div>
-      <Navbar />
+      <Navbar isLoading={isLoading} />
       <main>
         <Hero />
         <Work />

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, X, ArrowUpRight } from 'lucide-react';
 import { useData } from '../context/DataContext';
 
-export function Navbar() {
+export function Navbar({ isLoading = false }) {
   const { data } = useData();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -17,8 +17,8 @@ export function Navbar() {
   return (
     <motion.div
       initial={{ opacity: 0, y: -100 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.2 }}
+      animate={{ opacity: isLoading ? 0 : 1, y: isLoading ? -100 : 0 }}
+      transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: isLoading ? 0 : 0.6 }}
       className="fixed z-[1000] top-5 left-1/2 -translate-x-1/2 w-content-width flex justify-center"
     >
       <motion.nav 
