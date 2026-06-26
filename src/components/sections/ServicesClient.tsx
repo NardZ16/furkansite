@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Video, Plane, MonitorPlay, Camera, Edit3, Image as ImageIcon } from "lucide-react";
+import TiltCard from "@/components/ui/TiltCard";
 
 export default function ServicesClient() {
   const services = [
@@ -77,26 +78,28 @@ export default function ServicesClient() {
             }`}
           >
             <div className="w-full lg:w-1/2">
-              <div className="aspect-video bg-surface rounded-2xl flex items-center justify-center border border-white/5 relative overflow-hidden group">
-                 <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                 <div className="text-accent/40 group-hover:text-accent transform group-hover:scale-110 transition-all duration-500">
-                   {service.icon}
-                 </div>
-              </div>
+              <TiltCard>
+                <div className="aspect-video bg-surface rounded-3xl flex items-center justify-center border border-muted/10 relative overflow-hidden group card-hover-light shadow-sm">
+                   <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                   <div className="text-accent/60 group-hover:text-accent transform group-hover:scale-110 transition-all duration-500">
+                     {service.icon}
+                   </div>
+                </div>
+              </TiltCard>
             </div>
             
             <div className="w-full lg:w-1/2 space-y-6">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-accent/10 text-accent mb-2">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-accent/10 text-accent mb-2 shadow-sm">
                 {service.icon}
               </div>
-              <h2 className="font-heading text-3xl md:text-4xl font-bold">{service.title}</h2>
+              <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground">{service.title}</h2>
               <p className="text-lg text-muted leading-relaxed">
                 {service.desc}
               </p>
               
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
                 {service.features.map((feature, i) => (
-                  <li key={i} className="flex items-center text-white/90">
+                  <li key={i} className="flex items-center text-foreground font-medium text-[15px]">
                     <span className="w-2 h-2 rounded-full bg-accent mr-3"></span>
                     {feature}
                   </li>
