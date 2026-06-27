@@ -42,8 +42,8 @@ export function Hero() {
               <span className="text-base font-medium whitespace-nowrap">Benimle iletişime geç</span>
             </a>
           </motion.div>
-          <div className="w-full md:w-[54%] relative h-80 md:h-96">
-            <div className="absolute inset-0 card rounded-2xl md:hidden"></div>
+          <div className="hidden md:block w-full md:w-[54%] relative h-80 md:h-96">
+            {/* Boş alan sadece masaüstünde yer tutsun, mobilde gizlensin */}
           </div>
         </div>
       </div>
