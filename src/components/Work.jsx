@@ -5,24 +5,24 @@ import { Link } from 'react-router-dom';
 import { TextReveal } from './ui/TextReveal';
 import { useData } from '../context/DataContext';
 
-function ProjectCard({ project, index, scrollY, isDesktop }) {
-  // Use index to calculate alternating fan layout config
-  const fanConfig = [
-    { yOffset: "-100vh", xOffset: "38vw", rot: "-12deg", scale: 1.1 },
-    { yOffset: "-110vh", xOffset: "19vw", rot: "2deg", scale: 1.15 },
-    { yOffset: "-105vh", xOffset: "0vw", rot: "16deg", scale: 1.2 },
-  ];
-  const config = fanConfig[index % 3];
-
-  const y = useTransform(scrollY, [0, 600], [isDesktop ? config.yOffset : "-60vh", "0vh"]);
-  const x = useTransform(scrollY, [0, 600], [isDesktop ? config.xOffset : "0vw", "0vw"]);
-  const rotate = useTransform(scrollY, [0, 600], [config.rot, "0deg"]);
-  const scale = useTransform(scrollY, [0, 600], [config.scale, 1]);
-  const zIndex = 30 - (index % 3) * 10;
+function ProjectCard({ project, index }) {
+  // Use a reliable viewport-based entrance animation instead of absolute scroll values
+  // This completely fixes mobile responsiveness and overlapping issues on various screens
+  const initialRot = index % 3 === 0 ? -4 : index % 3 === 2 ? 4 : 0;
 
   return (
-    <div className="flex flex-col gap-3 xl:gap-4 2xl:gap-5">
-      <motion.div style={{ y, x, rotate, scale, zIndex }} className="aspect-4/3 rounded-3xl shadow-lg relative card p-2 xl:p-3 2xl:p-4 group will-change-transform origin-center">
+    <motion.div 
+      initial={{ opacity: 0, y: 100, rotate: initialRot, scale: 0.9 }}
+      whileInView={{ opacity: 1, y: 0, rotate: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ 
+        duration: 0.8, 
+        delay: (index % 3) * 0.15, // Staggered entrance
+        ease: [0.21, 0.47, 0.32, 0.98] 
+      }}
+      className="flex flex-col gap-3 xl:gap-4 2xl:gap-5"
+    >
+      <div className="aspect-4/3 rounded-3xl shadow-lg relative card p-2 xl:p-3 2xl:p-4 group origin-center">
         <div className="w-full h-full aspect-4/3 rounded-[1rem] overflow-hidden relative">
           <img alt={project.title} className="min-h-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src={project.image} />
           {project.tag && (
@@ -31,12 +31,12 @@ function ProjectCard({ project, index, scrollY, isDesktop }) {
             </span>
           )}
         </div>
-      </motion.div>
-      <p className="text-base md:text-lg lg:text-xl leading-snug">
+      </div>
+      <p className="text-base md:text-lg lg:text-xl leading-snug mt-2">
         <span className="font-semibold text-foreground">{project.title} </span>
         <span className="text-foreground/50">{project.description}</span>
       </p>
-    </div>
+    </motion.div>
   );
 }
 
@@ -69,8 +69,6 @@ export function Work() {
               key={index} 
               project={project} 
               index={index} 
-              scrollY={scrollY} 
-              isDesktop={isDesktop} 
             />
           ))}
         </div>
