@@ -6,16 +6,16 @@ import { TextReveal } from './ui/TextReveal';
 import { useData } from '../context/DataContext';
 
 function ProjectCard({ project, index, scrollYProgress, isDesktop }) {
-  // Eski yelpaze (fan) animasyonunun birebir aynısı, 
-  // Ancak 'vw' yerine karta oranlı '%' kullanarak tüm ekranlarda (Macbook vb.) kusursuz ve taşmasız çalışması sağlandı.
+  // Orijinal yelpaze efekti (Yukarıdan ve sağdan gelme)
+  // X offset değerleri % olarak verildi, böylece her ekranda kendi genişliğine göre hesaplanıp taşmayı engeller.
   const fanConfig = [
-    { yOffset: "-80vh", xOffset: "150%", rot: "-12deg", scale: 1.1 },
-    { yOffset: "-90vh", xOffset: "75%", rot: "2deg", scale: 1.15 },
-    { yOffset: "-85vh", xOffset: "0%", rot: "16deg", scale: 1.2 },
+    { yOffset: "-100vh", xOffset: "200%", rot: "-12deg", scale: 1.1 },
+    { yOffset: "-110vh", xOffset: "100%", rot: "2deg", scale: 1.15 },
+    { yOffset: "-105vh", xOffset: "0%", rot: "16deg", scale: 1.2 },
   ];
   const config = fanConfig[index % 3];
 
-  // Aşağı kaydırdıkça çalışan animasyon
+  // Aşağı kaydırdıkça çalışan animasyon (Sadece görseller için)
   const y = useTransform(scrollYProgress, [0, 1], [isDesktop ? config.yOffset : "-40vh", "0vh"]);
   const x = useTransform(scrollYProgress, [0, 1], [isDesktop ? config.xOffset : "0%", "0%"]);
   const rotate = useTransform(scrollYProgress, [0, 1], [config.rot, "0deg"]);
@@ -23,7 +23,7 @@ function ProjectCard({ project, index, scrollYProgress, isDesktop }) {
   const zIndex = 30 - (index % 3) * 10;
 
   return (
-    <div className="flex flex-col gap-3 xl:gap-4 2xl:gap-5">
+    <div className="flex flex-col gap-3 xl:gap-4 2xl:gap-5 relative">
       <motion.div style={{ y, x, rotate, scale, zIndex }} className="aspect-4/3 rounded-3xl shadow-lg relative card p-2 xl:p-3 2xl:p-4 group will-change-transform origin-center">
         <div className="w-full h-full aspect-4/3 rounded-[1rem] overflow-hidden relative">
           <img alt={project.title} className="min-h-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src={project.image} />
@@ -34,10 +34,11 @@ function ProjectCard({ project, index, scrollYProgress, isDesktop }) {
           )}
         </div>
       </motion.div>
-      <motion.p style={{ y, x }} className="text-base md:text-lg lg:text-xl leading-snug mt-2">
+      {/* Yazılar tamamen sabit kalır, animasyona dahil edilmez. */}
+      <p className="text-base md:text-lg lg:text-xl leading-snug mt-2 z-40 relative bg-[#111] p-1 rounded-lg">
         <span className="font-semibold text-foreground">{project.title} </span>
         <span className="text-foreground/50">{project.description}</span>
-      </motion.p>
+      </p>
     </div>
   );
 }
