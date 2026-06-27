@@ -127,7 +127,7 @@ export function Admin() {
       ...prev,
       allProjects: [
         ...(prev.allProjects || []),
-        { id: Date.now().toString(), title: 'Yeni Galeri Projesi', description: 'Kısa açıklama yazısı', media: [] }
+        { id: Date.now().toString(), title: 'Yeni Galeri Projesi', description: 'Kısa açıklama yazısı', coverImage: '', media: [] }
       ]
     }));
   };
@@ -391,6 +391,10 @@ export function Admin() {
                           <input type="text" value={project.title} onChange={(e) => handleAllProjectChange(pIndex, 'title', e.target.value)} className="w-full bg-[#2a2a2a] border border-transparent rounded-xl p-3 text-white text-sm focus:border-white/30 focus:outline-none" />
                         </div>
                         <div>
+                          <label className="block text-sm mb-1 text-gray-400">Kapak Görseli URL</label>
+                          <input type="text" value={project.coverImage || ''} onChange={(e) => handleAllProjectChange(pIndex, 'coverImage', e.target.value)} className="w-full bg-[#2a2a2a] border border-transparent rounded-xl p-3 text-white text-sm focus:border-white/30 focus:outline-none" placeholder="https://..." />
+                        </div>
+                        <div className="md:col-span-2">
                           <label className="block text-sm mb-1 text-gray-400">Açıklama</label>
                           <textarea rows="2" value={project.description} onChange={(e) => handleAllProjectChange(pIndex, 'description', e.target.value)} className="w-full bg-[#2a2a2a] border border-transparent rounded-xl p-3 text-white text-sm focus:border-white/30 focus:outline-none" />
                         </div>

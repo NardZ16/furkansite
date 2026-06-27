@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useData } from '../context/DataContext';
 import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { MediaRenderer } from '../components/MediaRenderer';
+import { ArrowLeft, Image as ImageIcon } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { CarouselModal } from '../components/CarouselModal';
 import { Footer } from '../components/Footer';
 
 export function Projects() {
   const { data, loading } = useData();
+  const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -34,18 +35,18 @@ export function Projects() {
         }}
       ></div>
 
-      {/* Header/Navbar specifically for Projects Page */}
+      {/* Header/Navbar */}
       <header className="fixed z-50 top-5 left-1/2 -translate-x-1/2 w-[90%] md:w-full max-w-6xl flex justify-between items-center bg-[#1a1a1a]/80 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/5 shadow-xl">
         <Link to="/" className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors">
           <ArrowLeft className="w-5 h-5" />
           <span className="font-medium">Ana Sayfaya Dön</span>
         </Link>
-        <span className="font-semibold text-lg tracking-tight">Tüm Projeler Galerisi</span>
-        <div className="w-20 hidden md:block"></div> {/* spacer to center title */}
+        <span className="font-semibold text-lg tracking-tight">Tüm Projeler</span>
+        <div className="w-20 hidden md:block"></div> {/* spacer */}
       </header>
 
       <main className="flex-1 pt-32 pb-20 px-4 md:px-10">
-        <div className="max-w-7xl mx-auto space-y-24">
+        <div className="max-w-7xl mx-auto">
           
           {projects.length === 0 && (
             <div className="text-center text-gray-500 py-20">
@@ -53,54 +54,74 @@ export function Projects() {
             </div>
           )}
 
-          {projects.map((project, index) => (
-            <motion.div 
-              key={project.id || index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8 }}
-              className="flex flex-col gap-8"
-            >
-              {/* Project Info */}
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-4">
-                  <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white">{project.title}</h2>
-                  <div className="h-px bg-white/10 flex-1 mt-2"></div>
-                </div>
-                {project.description && (
-                  <p className="text-gray-400 text-lg md:text-xl max-w-3xl leading-relaxed">
-                    {project.description}
-                  </p>
-                )}
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((project, index) => (
+              <motion.div 
+                key={project.id || index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                onClick={() => setSelectedProject(project)}
+                className="group cursor-pointer flex flex-col gap-4"
+              >
+                {/* Cover Image */}
+                <div className="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-[#1a1a1a] border border-white/5 relative shadow-lg">
+                  {project.coverImage ? (
+                    <img 
+                      src={project.coverImage} 
+                      alt={project.title} 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-gray-500">
+                      <ImageIcon className="w-12 h-12 mb-2 opacity-50" />
+                      <span className="text-sm font-medium">Kapak Görseli Yok</span>
+                    </div>
+                  )}
+                  
+                  {/* Overlay on Hover */}
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span className="px-6 py-3 bg-white text-black font-semibold rounded-full text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                      Galeriyi Görüntüle
+                    </span>
+                  </div>
 
-              {/* Media Grid */}
-              {project.media && project.media.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {project.media.map((item, mIndex) => (
-                    <motion.div 
-                      key={mIndex}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: mIndex * 0.1 }}
-                      className={`
-                        ${item.type === 'video' ? 'md:col-span-2 xl:col-span-2 aspect-video' : 'aspect-[4/3]'}
-                      `}
-                    >
-                      <MediaRenderer media={item} />
-                    </motion.div>
-                  ))}
+                  {/* Media Count Badge */}
+                  {project.media && project.media.length > 0 && (
+                    <div className="absolute top-4 right-4 px-3 py-1 bg-black/50 backdrop-blur-md rounded-full text-xs font-semibold text-white border border-white/10">
+                      {project.media.length} İçerik
+                    </div>
+                  )}
                 </div>
-              )}
-            </motion.div>
-          ))}
+
+                {/* Info */}
+                <div>
+                  <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white mb-2 group-hover:text-gray-300 transition-colors">
+                    {project.title}
+                  </h2>
+                  {project.description && (
+                    <p className="text-gray-400 text-sm md:text-base leading-relaxed line-clamp-2">
+                      {project.description}
+                    </p>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
           
         </div>
       </main>
 
       <Footer />
+
+      {/* Carousel Modal */}
+      {selectedProject && (
+        <CarouselModal 
+          project={selectedProject} 
+          onClose={() => setSelectedProject(null)} 
+        />
+      )}
     </div>
   );
 }
