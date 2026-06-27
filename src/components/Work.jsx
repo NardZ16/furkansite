@@ -5,24 +5,20 @@ import { Link } from 'react-router-dom';
 import { TextReveal } from './ui/TextReveal';
 import { useData } from '../context/DataContext';
 
-function ProjectCard({ project, index }) {
-  // Use a reliable viewport-based entrance animation instead of absolute scroll values
-  // This completely fixes mobile responsiveness and overlapping issues on various screens
-  const initialRot = index % 3 === 0 ? -4 : index % 3 === 2 ? 4 : 0;
+function ProjectCard({ project, index, scrollYProgress, isDesktop }) {
+  // Yalnızca Y ekseninde "aşağıdan yukarı / yukarıdan aşağı oturma" (parallax) efekti.
+  // X ekseni sabit kalıyor, böylece birbirine girmiyor.
+  // Mobilde ve Mac ekranlarında kutunun genişliğini aşmıyor.
+  
+  const yStart = isDesktop ? (index % 3 === 0 ? "-20vh" : index % 3 === 1 ? "-30vh" : "-15vh") : "-10vh";
+  const y = useTransform(scrollYProgress, [0, 1], [yStart, "0vh"]);
+  
+  const rotStart = index % 3 === 0 ? "-6deg" : index % 3 === 2 ? "6deg" : "0deg";
+  const rotate = useTransform(scrollYProgress, [0, 1], [rotStart, "0deg"]);
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 100, rotate: initialRot, scale: 0.9 }}
-      whileInView={{ opacity: 1, y: 0, rotate: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ 
-        duration: 0.8, 
-        delay: (index % 3) * 0.15, // Staggered entrance
-        ease: [0.21, 0.47, 0.32, 0.98] 
-      }}
-      className="flex flex-col gap-3 xl:gap-4 2xl:gap-5"
-    >
-      <div className="aspect-4/3 rounded-3xl shadow-lg relative card p-2 xl:p-3 2xl:p-4 group origin-center">
+    <div className="flex flex-col gap-3 xl:gap-4 2xl:gap-5">
+      <motion.div style={{ y, rotate }} className="aspect-4/3 rounded-3xl shadow-lg relative card p-2 xl:p-3 2xl:p-4 group origin-center will-change-transform">
         <div className="w-full h-full aspect-4/3 rounded-[1rem] overflow-hidden relative">
           <img alt={project.title} className="min-h-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src={project.image} />
           {project.tag && (
@@ -31,21 +27,27 @@ function ProjectCard({ project, index }) {
             </span>
           )}
         </div>
-      </div>
-      <p className="text-base md:text-lg lg:text-xl leading-snug mt-2">
+      </motion.div>
+      <motion.p style={{ y }} className="text-base md:text-lg lg:text-xl leading-snug mt-2">
         <span className="font-semibold text-foreground">{project.title} </span>
         <span className="text-foreground/50">{project.description}</span>
-      </p>
-    </motion.div>
+      </motion.p>
+    </div>
   );
 }
 
 export function Work() {
   const { data } = useData();
   const containerRef = useRef(null);
-  const { scrollY } = useScroll();
-  const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768;
+  
+  // Yerel scroll yüzdesini hesaplar: 
+  // Animasyon bileşenin üst kısmı ekrana girdiğinde başlar, ortası ekranın ortasına geldiğinde oturur.
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "center center"]
+  });
 
+  const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768;
   const projects = data.work?.projects || [];
 
   return (
@@ -69,6 +71,8 @@ export function Work() {
               key={index} 
               project={project} 
               index={index} 
+              scrollYProgress={scrollYProgress}
+              isDesktop={isDesktop}
             />
           ))}
         </div>
