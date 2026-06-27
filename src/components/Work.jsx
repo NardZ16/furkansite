@@ -23,8 +23,8 @@ function ProjectCard({ project, index, scrollYProgress, isDesktop }) {
 
   return (
     <div className="flex flex-col gap-3 xl:gap-4 2xl:gap-5 relative">
-      <motion.div style={{ y, x, rotate, scale, zIndex }} className="aspect-4/3 rounded-3xl shadow-lg relative card p-2 xl:p-3 2xl:p-4 group will-change-transform origin-center">
-        <div className="w-full h-full aspect-4/3 rounded-[1rem] overflow-hidden relative">
+      <motion.div style={{ y, x, rotate, scale, zIndex }} className="aspect-[4/3] rounded-3xl shadow-lg relative card p-2 xl:p-3 2xl:p-4 group will-change-transform origin-center">
+        <div className="w-full h-full aspect-[4/3] rounded-[1rem] overflow-hidden relative">
           <img alt={project.title} className="min-h-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src={project.image} />
           {project.tag && (
             <span className="absolute bottom-2 left-2 xl:bottom-3 xl:left-3 2xl:bottom-4 2xl:left-4 px-3 py-1.5 text-xs font-medium text-primary-cta-text rounded-full backdrop-blur-xl bg-primary-cta-text/15 border border-primary-cta-text/20">
