@@ -57,7 +57,7 @@ export function Contact() {
                 </div>
               </form>
             </div>
-            <div className="relative h-100 md:h-auto card rounded overflow-hidden group">
+            <div className="hidden md:block relative h-100 md:h-auto card rounded overflow-hidden group">
               <motion.div style={{ scale }} className="w-full h-full origin-center transition-transform duration-700 ease-out group-hover:scale-105">
                 <img alt="Contact" className="min-h-0 rounded md:absolute md:inset-0 size-full object-cover" src="https://storage.googleapis.com/webild/default/templates/creative-portfolio/contact.webp" />
               </motion.div>
