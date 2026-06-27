@@ -21,11 +21,8 @@ export function Admin() {
   }, [data]);
 
   useEffect(() => {
-    // Check if token exists in localStorage
     const token = localStorage.getItem('adminToken');
     if (token) {
-      // Optimistically set logged in, if PUT requests fail it will naturally fail later
-      // But let's verify token by a simple GET request or just assume it's valid for now
       setIsLoggedIn(true);
     }
   }, []);
@@ -67,7 +64,6 @@ export function Admin() {
     }));
   };
 
-  // Array handlers
   const handleArrayChange = (section, arrayName, index, key, value) => {
     setFormData(prev => {
       const newArray = [...(prev[section]?.[arrayName] || [])];
@@ -125,6 +121,61 @@ export function Admin() {
     }));
   };
 
+  // --- All Projects (Gallery) Handlers ---
+  const handleAddAllProject = () => {
+    setFormData(prev => ({
+      ...prev,
+      allProjects: [
+        ...(prev.allProjects || []),
+        { id: Date.now().toString(), title: 'Yeni Galeri Projesi', description: 'Kısa açıklama yazısı', media: [] }
+      ]
+    }));
+  };
+
+  const handleRemoveAllProject = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      allProjects: (prev.allProjects || []).filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleAllProjectChange = (index, key, value) => {
+    setFormData(prev => {
+      const newAll = [...(prev.allProjects || [])];
+      newAll[index] = { ...newAll[index], [key]: value };
+      return { ...prev, allProjects: newAll };
+    });
+  };
+
+  const handleAddMedia = (projectIndex) => {
+    setFormData(prev => {
+      const newAll = [...(prev.allProjects || [])];
+      const newMedia = [...(newAll[projectIndex].media || [])];
+      newMedia.push({ type: 'image', url: '' });
+      newAll[projectIndex] = { ...newAll[projectIndex], media: newMedia };
+      return { ...prev, allProjects: newAll };
+    });
+  };
+
+  const handleRemoveMedia = (projectIndex, mediaIndex) => {
+    setFormData(prev => {
+      const newAll = [...(prev.allProjects || [])];
+      const newMedia = newAll[projectIndex].media.filter((_, i) => i !== mediaIndex);
+      newAll[projectIndex] = { ...newAll[projectIndex], media: newMedia };
+      return { ...prev, allProjects: newAll };
+    });
+  };
+
+  const handleMediaChange = (projectIndex, mediaIndex, key, value) => {
+    setFormData(prev => {
+      const newAll = [...(prev.allProjects || [])];
+      const newMedia = [...(newAll[projectIndex].media || [])];
+      newMedia[mediaIndex] = { ...newMedia[mediaIndex], [key]: value };
+      newAll[projectIndex] = { ...newAll[projectIndex], media: newMedia };
+      return { ...prev, allProjects: newAll };
+    });
+  };
+
   const handleSave = async () => {
     setIsSaving(true);
     setMessage('');
@@ -167,7 +218,8 @@ export function Admin() {
   const tabs = [
     { id: 'navbar', label: 'Menü (Navbar)', icon: <Layout className="w-4 h-4" /> },
     { id: 'hero', label: 'Ana Ekran (Hero)', icon: <Home className="w-4 h-4" /> },
-    { id: 'work', label: 'Çalışmalar (Work)', icon: <Briefcase className="w-4 h-4" /> },
+    { id: 'work', label: 'Vitrin Çalışmalar', icon: <Briefcase className="w-4 h-4" /> },
+    { id: 'allProjects', label: 'Tüm Projeler (Galeri)', icon: <ImageIcon className="w-4 h-4" /> },
     { id: 'about', label: 'Hakkımda (About)', icon: <User className="w-4 h-4" /> },
     { id: 'services', label: 'Hizmetler (Services)', icon: <Video className="w-4 h-4" /> },
     { id: 'contact', label: 'İletişim (Contact)', icon: <MessageSquare className="w-4 h-4" /> },
@@ -176,12 +228,11 @@ export function Admin() {
 
   return (
     <div className="min-h-screen flex bg-[#111] text-white font-sans">
-      {/* Sidebar */}
       <div className="w-64 bg-[#161616] border-r border-white/5 flex flex-col hidden md:flex">
         <div className="p-6">
           <h2 className="text-xl font-bold tracking-tight">Portfolyo Admin</h2>
         </div>
-        <nav className="flex-1 px-4 flex flex-col gap-1">
+        <nav className="flex-1 px-4 flex flex-col gap-1 overflow-y-auto">
           {tabs.map(tab => (
             <button
               key={tab.id}
@@ -195,7 +246,7 @@ export function Admin() {
             </button>
           ))}
         </nav>
-        <div className="p-4 border-t border-white/5">
+        <div className="p-4 border-t border-white/5 shrink-0">
           <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-colors text-sm font-medium">
             <LogOut className="w-4 h-4" />
             Çıkış Yap
@@ -203,9 +254,7 @@ export function Admin() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        {/* Mobile Header */}
         <div className="md:hidden flex items-center justify-between p-4 bg-[#161616] border-b border-white/5">
           <h2 className="text-xl font-bold">Admin</h2>
           <select 
@@ -217,7 +266,6 @@ export function Admin() {
           </select>
         </div>
 
-        {/* Form Content Scrollable */}
         <div className="flex-1 overflow-y-auto p-6 md:p-10">
           <div className="max-w-4xl mx-auto pb-32">
             <div className="mb-8 flex justify-between items-center">
@@ -273,7 +321,7 @@ export function Admin() {
             {activeTab === 'work' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-medium text-gray-300">Projeler</h3>
+                  <h3 className="text-lg font-medium text-gray-300">Ana Sayfa Projeleri</h3>
                   <button onClick={handleAddProject} className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition text-sm">
                     <Plus className="w-4 h-4" /> Yeni Ekle
                   </button>
@@ -309,6 +357,92 @@ export function Admin() {
                   ))}
                   {(!formData.work?.projects || formData.work.projects.length === 0) && (
                     <p className="text-gray-500 text-sm italic">Henüz proje eklenmemiş.</p>
+                  )}
+                </div>
+              </motion.div>
+            )}
+
+            {/* TAB: ALL PROJECTS (GALLERY) */}
+            {activeTab === 'allProjects' && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
+                <div className="flex justify-between items-center bg-[#1a1a1a] p-4 rounded-xl border border-white/10">
+                  <div>
+                    <h3 className="text-lg font-medium text-white">Projeler Galerisi</h3>
+                    <p className="text-sm text-gray-400">Bu projeler detaylı "Projeler" sayfasında görünür.</p>
+                  </div>
+                  <button onClick={handleAddAllProject} className="flex items-center gap-2 bg-white text-black hover:bg-gray-200 px-5 py-2.5 rounded-lg transition text-sm font-semibold">
+                    <Plus className="w-4 h-4" /> Yeni Proje Kartı Ekle
+                  </button>
+                </div>
+                
+                <div className="space-y-10">
+                  {(formData.allProjects || []).map((project, pIndex) => (
+                    <div key={pIndex} className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 relative">
+                      <div className="flex justify-between items-start mb-6">
+                        <h4 className="text-lg font-semibold text-white">Proje #{pIndex + 1}</h4>
+                        <button onClick={() => handleRemoveAllProject(pIndex)} className="text-gray-500 hover:text-red-400 transition bg-red-500/10 p-2 rounded-lg">
+                          <Trash className="w-5 h-5" />
+                        </button>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 gap-5 mb-8">
+                        <div>
+                          <label className="block text-sm mb-1 text-gray-400">Proje Adı</label>
+                          <input type="text" value={project.title} onChange={(e) => handleAllProjectChange(pIndex, 'title', e.target.value)} className="w-full bg-[#2a2a2a] border border-transparent rounded-xl p-3 text-white text-sm focus:border-white/30 focus:outline-none" />
+                        </div>
+                        <div>
+                          <label className="block text-sm mb-1 text-gray-400">Açıklama</label>
+                          <textarea rows="2" value={project.description} onChange={(e) => handleAllProjectChange(pIndex, 'description', e.target.value)} className="w-full bg-[#2a2a2a] border border-transparent rounded-xl p-3 text-white text-sm focus:border-white/30 focus:outline-none" />
+                        </div>
+                      </div>
+
+                      {/* Medias Section */}
+                      <div className="bg-[#111] border border-white/5 rounded-xl p-5">
+                        <div className="flex justify-between items-center mb-4">
+                          <h5 className="text-sm font-medium text-gray-300">Medya Galerisi (Görsel ve Videolar)</h5>
+                          <button onClick={() => handleAddMedia(pIndex)} className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg transition text-xs font-medium">
+                            <Plus className="w-3 h-3" /> Medya Ekle
+                          </button>
+                        </div>
+
+                        <div className="space-y-4">
+                          {(project.media || []).map((item, mIndex) => (
+                            <div key={mIndex} className="flex gap-3 items-start bg-[#1a1a1a] p-3 rounded-lg border border-white/5 relative">
+                              <div className="w-32 shrink-0">
+                                <label className="block text-xs mb-1 text-gray-500">Tip</label>
+                                <select 
+                                  value={item.type} 
+                                  onChange={(e) => handleMediaChange(pIndex, mIndex, 'type', e.target.value)}
+                                  className="w-full bg-[#2a2a2a] text-white rounded-lg p-2 text-xs border border-transparent focus:border-white/30"
+                                >
+                                  <option value="image">Görsel (Resim)</option>
+                                  <option value="video">Video (YouTube/mp4)</option>
+                                </select>
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <label className="block text-xs mb-1 text-gray-500">Medya Linki (URL)</label>
+                                <input 
+                                  type="text" 
+                                  value={item.url} 
+                                  onChange={(e) => handleMediaChange(pIndex, mIndex, 'url', e.target.value)} 
+                                  className="w-full bg-[#2a2a2a] border border-transparent rounded-lg p-2 text-white text-xs focus:border-white/30 focus:outline-none" 
+                                  placeholder="https://..."
+                                />
+                              </div>
+                              <button onClick={() => handleRemoveMedia(pIndex, mIndex)} className="mt-5 text-gray-500 hover:text-red-400 transition">
+                                <Trash className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ))}
+                          {(!project.media || project.media.length === 0) && (
+                            <p className="text-gray-500 text-xs italic">Henüz görsel veya video eklenmemiş.</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {(!formData.allProjects || formData.allProjects.length === 0) && (
+                    <p className="text-gray-500 text-sm italic text-center py-10">Henüz galeri projesi eklenmemiş.</p>
                   )}
                 </div>
               </motion.div>

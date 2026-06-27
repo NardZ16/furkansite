@@ -36,6 +36,17 @@ const defaultData = {
       }
     ]
   },
+  allProjects: [
+    {
+      id: "1",
+      title: "Örnek Galeri Projesi",
+      description: "Bu proje detaylı galeri sisteminin nasıl göründüğünü göstermek içindir.",
+      media: [
+        { type: "image", url: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2070" },
+        { type: "image", url: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2070" }
+      ]
+    }
+  ],
   about: {
     headline: "Çekimden kurguya kadar tüm süreci tek başına yürütebilen; konsept geliştirme, çekim, yönetmenlik ve post-prodüksiyon uzmanı.",
     name: "Furkan Efe Kocabaş",
