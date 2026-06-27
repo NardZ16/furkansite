@@ -7,7 +7,6 @@ import { useData } from '../context/DataContext';
 
 function ProjectCard({ project, index, scrollYProgress, isDesktop }) {
   // Orijinal yelpaze efekti (Yukarıdan ve sağdan gelme)
-  // X offset değerleri % olarak verildi, böylece her ekranda kendi genişliğine göre hesaplanıp taşmayı engeller.
   const fanConfig = [
     { yOffset: "-100vh", xOffset: "200%", rot: "-12deg", scale: 1.1 },
     { yOffset: "-110vh", xOffset: "100%", rot: "2deg", scale: 1.15 },
@@ -15,11 +14,11 @@ function ProjectCard({ project, index, scrollYProgress, isDesktop }) {
   ];
   const config = fanConfig[index % 3];
 
-  // Aşağı kaydırdıkça çalışan animasyon (Sadece görseller için)
-  const y = useTransform(scrollYProgress, [0, 1], [isDesktop ? config.yOffset : "-40vh", "0vh"]);
+  // Sadece masaüstünde animasyon çalışsın, mobilde her şey 0'da (sabit) kalsın.
+  const y = useTransform(scrollYProgress, [0, 1], [isDesktop ? config.yOffset : "0vh", "0vh"]);
   const x = useTransform(scrollYProgress, [0, 1], [isDesktop ? config.xOffset : "0%", "0%"]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [config.rot, "0deg"]);
-  const scale = useTransform(scrollYProgress, [0, 1], [config.scale, 1]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [isDesktop ? config.rot : "0deg", "0deg"]);
+  const scale = useTransform(scrollYProgress, [0, 1], [isDesktop ? config.scale : 1, 1]);
   const zIndex = 30 - (index % 3) * 10;
 
   return (
@@ -34,8 +33,7 @@ function ProjectCard({ project, index, scrollYProgress, isDesktop }) {
           )}
         </div>
       </motion.div>
-      {/* Yazılar tamamen sabit kalır, animasyona dahil edilmez. */}
-      <p className="text-base md:text-lg lg:text-xl leading-snug mt-2 z-40 relative bg-[#111] p-1 rounded-lg">
+      <p className="text-base md:text-lg lg:text-xl leading-snug mt-2 relative z-40 drop-shadow-md">
         <span className="font-semibold text-foreground">{project.title} </span>
         <span className="text-foreground/50">{project.description}</span>
       </p>
