@@ -63,7 +63,7 @@ export function Projects() {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 onClick={() => setSelectedProject(project)}
-                className="group cursor-pointer flex flex-col gap-4"
+                className="group cursor-pointer flex flex-col gap-4 w-full max-w-[320px] mx-auto sm:max-w-[380px] md:max-w-none"
               >
                 {/* Cover Image */}
                 <div className="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-[#1a1a1a] border border-white/5 relative shadow-lg">
