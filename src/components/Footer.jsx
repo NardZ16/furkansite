@@ -15,13 +15,13 @@ export function Footer({ hideName = false }) {
           </div>
         )}
         <div className="h-px w-full mb-5 bg-foreground/50"></div>
-        <div className="flex flex-col gap-3 items-center justify-between md:flex-row">
-          <span className="text-base opacity-75">{data.footer?.copyright || "© 2026 Furkan Efe Kocabaş. Tüm hakları saklıdır."}</span>
+        <div className="flex flex-col gap-3 items-center justify-between md:flex-row bg-[#222] p-4 rounded-xl mt-4">
+          <span className="text-sm md:text-base text-white font-medium">{data.footer?.copyright || "© 2026 Furkan Efe Kocabaş. Tüm hakları saklıdır."}</span>
           <div className="flex items-center gap-3">
-            <button className="flex items-center justify-center size-10 rounded-full primary-button text-primary-cta-text cursor-pointer hover:scale-105 transition-transform">
+            <button className="flex items-center justify-center size-10 rounded-full bg-white/10 text-white cursor-pointer hover:scale-105 hover:bg-white/20 transition-all">
               <Globe className="w-4 h-4" />
             </button>
-            <button className="flex items-center justify-center size-10 rounded-full primary-button text-primary-cta-text cursor-pointer hover:scale-105 transition-transform">
+            <button className="flex items-center justify-center size-10 rounded-full bg-white/10 text-white cursor-pointer hover:scale-105 hover:bg-white/20 transition-all">
               <ArrowUpRight className="w-4 h-4" />
             </button>
           </div>
