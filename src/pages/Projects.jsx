@@ -113,7 +113,7 @@ export function Projects() {
         </div>
       </main>
 
-      <Footer />
+      <Footer hideName={true} />
 
       {/* Carousel Modal */}
       {selectedProject && (

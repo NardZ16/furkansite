@@ -60,14 +60,9 @@ export function Services() {
               {list.map((service, index) => {
                 const colSpanClass = service.colSpan === 5 ? 'md:col-span-5' : service.colSpan === 7 ? 'md:col-span-7' : 'md:col-span-6';
                 return (
-                  <div key={index} className={`${colSpanClass} flex flex-col gap-3 xl:gap-3.5 2xl:gap-4 p-3 xl:p-3.5 2xl:p-4 card rounded hover:-translate-y-1 transition-transform duration-300`}>
-                    <div className="h-60 xl:h-72 2xl:h-80 rounded overflow-hidden bg-foreground/5 shadow shadow-foreground/5">
-                      <img alt={service.title} className="w-full h-full min-h-0 object-cover rounded hover:scale-105 transition-transform duration-500" src={service.image} />
-                    </div>
-                    <div className="flex flex-col gap-1 p-3 xl:p-3.5 2xl:p-4">
-                      <h3 className="text-xl md:text-2xl font-semibold leading-snug text-balance">{service.title}</h3>
-                      <p className="text-sm md:text-base leading-snug text-balance">{service.description}</p>
-                    </div>
+                  <div key={index} className={`${colSpanClass} flex flex-col justify-center gap-2 p-6 md:p-8 card rounded hover:-translate-y-1 transition-transform duration-300`}>
+                    <h3 className="text-xl md:text-2xl font-semibold leading-snug text-balance">{service.title}</h3>
+                    <p className="text-sm md:text-base leading-relaxed text-balance opacity-80">{service.description}</p>
                   </div>
                 );
               })}
