@@ -10,13 +10,15 @@ export function Loader({ onLoadingComplete }) {
         if (prev >= 100) {
           clearInterval(timer);
           setTimeout(() => {
-            onLoadingComplete();
+            if (typeof onLoadingComplete === 'function') {
+              onLoadingComplete();
+            }
           }, 500);
           return 100;
         }
         return prev + 2; // Simulate loading
       });
-    }, 20);
+    }, 30); // 50 * 30ms = 1.5s + 0.5s delay = 2 seconds total
     return () => clearInterval(timer);
   }, [onLoadingComplete]);
 

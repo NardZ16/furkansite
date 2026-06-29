@@ -36,22 +36,21 @@ export function Home() {
 
     requestAnimationFrame(raf);
 
-    // Loader simulation (or wait for data)
-    if (!dataLoading) {
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 2000); // 2 saniyelik loader gösterimi
-      return () => {
-        clearTimeout(timer);
-        lenis.destroy();
-      };
-    }
-  }, [dataLoading]);
+    // Sadece Lenis'i cleanup yap, timeout'u kaldırdık
+    return () => {
+      lenis.destroy();
+    };
+  }, []); // Sadece bir kere çalışır
 
   return (
     <>
       <AnimatePresence>
-        {(isLoading || dataLoading) && <Loader key="loader" />}
+        {(isLoading || dataLoading) && (
+          <Loader 
+            key="loader" 
+            onLoadingComplete={() => setIsLoading(false)} 
+          />
+        )}
       </AnimatePresence>
 
       {!dataLoading && (
