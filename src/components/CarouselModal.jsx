@@ -62,11 +62,11 @@ export function CarouselModal({ project, onClose }) {
         </div>
 
         {/* Content */}
-        <div className="w-full h-full flex items-center justify-center p-4 md:p-20 relative">
+        <div className="w-full h-full flex items-center justify-center p-4 md:p-10 relative mt-10 md:mt-0">
           {mediaList.length === 0 ? (
             <div className="text-gray-500">Bu projede henüz medya bulunmuyor.</div>
           ) : (
-            <div className="w-full max-w-7xl aspect-video md:aspect-[21/9] lg:aspect-video relative bg-black rounded-xl overflow-hidden shadow-2xl">
+            <div className="w-full max-w-6xl h-[65vh] md:h-[85vh] relative bg-black rounded-xl overflow-hidden shadow-2xl flex items-center justify-center">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentIndex}
@@ -74,7 +74,7 @@ export function CarouselModal({ project, onClose }) {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -50 }}
                   transition={{ duration: 0.3 }}
-                  className="w-full h-full"
+                  className="w-full h-full flex items-center justify-center"
                 >
                   <MediaRenderer media={mediaList[currentIndex]} />
                 </motion.div>
